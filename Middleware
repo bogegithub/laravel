@@ -1,0 +1,26 @@
+知识点:
+1:array_reduce() 用回调函数迭代地将数组简化为单一的值 
+例子:
+function sum($carry, $item)
+{
+    $carry += $item;
+    return $carry;
+}
+$a = array(1,2,3,4,5);
+var_dump(array_reduce($a, "sum")); // int(15)
+var_dump(array_reduce($a, "sum",5)); // int(20)
+2:array_user_func() 和 array_user_func_array()
+第一个把第一个参数作为回调函数调用
+第二个调用回调函数，并把一个数组参数作为回调函数的参数
+namespace Foobar;
+
+class Foo {
+    static public function test() {
+        print "Hello world!\n";
+    }
+}
+
+call_user_func(__NAMESPACE__ .'\Foo::test'); // As of PHP 5.3.0
+call_user_func(array(__NAMESPACE__ .'\Foo', 'test')); // As of PHP 5.3.0
+
+
