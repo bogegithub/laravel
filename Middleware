@@ -24,3 +24,30 @@ call_user_func(__NAMESPACE__ .'\Foo::test'); // As of PHP 5.3.0
 call_user_func(array(__NAMESPACE__ .'\Foo', 'test')); // As of PHP 5.3.0
 
 
+反射机制:
+1:$concrete参数是类
+$reflector = new ReflectionClass($concrete);
+2:检查类是否可实例化
+if (!$reflector->isInstantiable()) {
+    return $this->notInstantiable($concrete);
+}
+$this->buildStack[] = $concrete;
+3:获取类的构造函数
+$constructor = $reflector->getConstructor();
+4:判断构造函数是否为空
+if (is_null($constructor)) {
+    array_pop($this->buildStack)
+5:如果为空直接返回这个类的对象
+    return new $concrete;
+}
+6:如果参数不为空 获取构造函数的参数
+$dependencies = $constructor->getParameters();
+7:解决依赖
+$instances = $this->resolveDependencies(
+    $dependencies
+);
+array_pop($this->buildStack);
+8:从给出的参数创建一个新的类实例。
+return $reflector->newInstanceArgs($instances);
+
+
